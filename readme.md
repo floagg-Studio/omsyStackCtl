@@ -30,7 +30,7 @@ OmsyServerStore  →  OmsyServer  →  omsyStackCtl
 (scripts d'install)  (environnement)  (démon + contrôle)
 ```
 
-Il faut donc **installer OmsyServer (avec OmsyServerStore) avant** d'utiliser omsyStackCtl. Les dossiers référencés dans `omsy.conf` (`share/logs`, `share/config`, etc.) sont ceux créés par OmsyServer.
+Il faut donc **installer OmsyServer (avec OmsyServerStore) avant** d'utiliser omsyStackCtl. Les dossiers référencés dans `omsy.conf` (`/chemin/vers/OmsyServer/share/logs`, `/chemin/vers/OmsyServer/share/config`, etc.) sont ceux créés par OmsyServer.
 
 ## Fonctionnalités
 
@@ -68,7 +68,8 @@ Suivez ensuite le README d'OmsyServer :
 ```bash
 git clone https://github.com/is-omini/omsyStackCtl.git
 cd omsyStackCtl
-# <à compléter : build / chmod +x / installation des dépendances>
+gcc src/omsyd.c src/common.c -o omsyd
+gcc src/omsyctl.c src/common.c -o omsyctl
 ```
 
 ## Configuration
@@ -95,10 +96,19 @@ confdir="/chemin/vers/OmsyServer/share/config/omsyctl"
 
 ### Définir un service
 
-Les services sont déclarés dans `./share/config/omsy/`. Les services déjà décrits par OmsyServer dans `systemcontroler.json` (mysql, nginx, apache, phpfpm85, redis, vsftpd) sont disponibles.
+Les services sont déclarés dans `/chemin/vers/OmsyServer/share/config/omsy/`. Les services déjà décrits par OmsyServer dans `systemcontroler.json` (mysql, nginx, apache, phpfpm85, redis, vsftpd) sont disponibles.
 
 ```
-<à compléter : format d'un fichier de service, avec un exemple minimal>
+label="MySQL / MariaDB"
+shell="/chemin/vers/OmsyServer/source/mysql.sh"
+bins="mysqld","mariadbd","mysql"
+start="/chemin/vers/OmsyServer/sys/bin/mysqld --defaults-file=/chemin/vers/OmsyServer/share/config/mysql/my.cnf --user=root"
+stop="pkill -TERM mysqld_safe", "/chemin/vers/OmsyServer/sys/bin/mysqladmin --socket=/chemin/vers/OmsyServer/share/run/mysql.sock -u root shutdown"
+label="MySQL / MariaDB"
+shell="/chemin/vers/OmsyServer/source/mysql.sh"
+bins="mysqld","mariadbd","mysql"
+start="/chemin/vers/OmsyServer/sys/bin/mysqld --defaults-file=/chemin/vers/OmsyServer/share/config/mysql/my.cnf --user=root"
+stop="pkill -TERM mysqld_safe", "/chemin/vers/OmsyServer/sys/bin/mysqladmin --socket=/chemin/vers/OmsyServer/share/run/mysql.sock -u root shutdown"
 ```
 
 ## Utilisation
@@ -142,7 +152,3 @@ omsyStackCtl/
 ## Contribuer
 
 Les contributions sont les bienvenues : ouvrez une issue ou une pull request.
-
-## Licence
-
-<à compléter : MIT, GPL, etc. — aucune licence n'est actuellement définie dans le dépôt>
