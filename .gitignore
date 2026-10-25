@@ -1,1 +1,10 @@
 .DS_Store
+src/include
+src/listen.c
+src/main.c
+src/conf.c
+share/
+omsyd
+omsyctl
+conf
+omsy.conf
