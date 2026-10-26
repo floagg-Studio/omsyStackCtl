@@ -68,8 +68,8 @@ Suivez ensuite le README d'OmsyServer :
 ```bash
 git clone https://github.com/is-omini/omsyStackCtl.git
 cd omsyStackCtl
-gcc src/omsyd.c src/common.c -o omsyd
-gcc src/omsyctl.c src/common.c -o omsyctl
+gcc src/omsyd.c src/common.c -o build/omsyd
+gcc src/omsyctl.c src/common.c -o build/omsyctl
 ```
 
 ## Configuration
@@ -130,6 +130,7 @@ stop="pkill -TERM mysqld_safe", "/chemin/vers/OmsyServer/sys/bin/mysqladmin --so
 |----------|-------------------------------|
 | `start`  | Démarre les services indiqués |
 | `stop`   | Arrête les services indiqués  |
+| `status`   | Status des services indiqués  |
 
 ### Exemple complet
 

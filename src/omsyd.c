@@ -112,7 +112,7 @@ static void spawn_handler(int client_fd, int server_fd) {
 		signal(SIGPIPE, SIG_DFL);
 		char fd_str[16];
 		snprintf(fd_str, sizeof fd_str, "%d", client_fd);
-		execlp("python3", "python3", "handler.py", fd_str, NULL);
+		execlp("python3", "python3", "sys/omsy/handler/handler.py", fd_str, NULL);
 		log_msg("execlp python3: %s", strerror(errno));
 		_exit(127);
 	}

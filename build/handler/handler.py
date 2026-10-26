@@ -1,6 +1,18 @@
 import sys
 import socket
 
+sys.path.insert(0, 'sys/lib/omsy')
+try:
+	from omsycgi import CGI
+except ImportError:
+	sys.exit(1)
+
+# DEBUG
+from pathlib import Path
+dossier_actuel = Path.cwd()
+print(dossier_actuel)
+# DEBUG
+
 fd = int(sys.argv[1])
 sock = socket.socket(fileno=fd)
 print("[Python] Welcome.", file=sys.stderr)
@@ -19,20 +31,16 @@ while True:
 		print("[Python] CONNEXION FERMEE par le client", file=sys.stderr)
 		break
 
-	body = "<html><body><h1>Welcome to Omsy Server Python / C</h1></body></html>"
-	with open("index.html", 'r') as f:
-		body = f.read()
+	__cgi = CGI(request, sock)
+	body = __cgi.open(__cgi.templatepath(__cgi.path))
+	if(body == None):
+		body = "<html><body><h1>Welcome to Omsy Server Python / C</h1></body></html>"
 
-	response = (
-		"HTTP/1.1 200 OK\r\n"
-		"Content-Type: text/html; charset=utf-8\r\n"
-		f"Content-Length: {len(body.encode('utf-8'))}\r\n"
-		"Connection: keep-alive\r\n"
-		"\r\n"
-		f"{body}"
-	)
-	sock.sendall(response.encode("utf-8"))
-	print('[Python] Reponse sended', file=sys.stderr)
+
+	response = __cgi.response(body)
+	sock.sendall(response)
+	# DEBUG
+	sock.close()
 
 sock.close()
 print("[Python] Fermeture.", file=sys.stderr)
